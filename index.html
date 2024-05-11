@@ -8,6 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Sensor Dashboard</h1>
+        <p>Last updated: <span id="lastUpdated">26/5/2566 14:16</span></p>
+    </header>
     <div class="sensor-container">
         <div class="sensor-box">
             <h2>Dust Sensor Value</h2>
@@ -26,6 +30,11 @@
             <button onclick="toggleData('both')">Both Sensors</button>
         </div>
     </div>
+    <div class="suggestions">
+        <h2>Suggestions</h2>
+        <p id="suggestionsText">อย่าออกจากบ้าน ไม่งั้นพ่อมึงตาย</p>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

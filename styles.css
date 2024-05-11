@@ -1,15 +1,22 @@
+header {
+    background-color: #4CAF50; /* A deep green, similar to the Chadchart theme */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #ffffff;
     margin: 0;
-    padding: 20px;
+    padding: 0;
     text-align: center;
 }
 
 .sensor-container {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .sensor-box {
@@ -27,9 +34,9 @@ body {
 
 .chart-container {
     position: relative;
-    height: 700px; /* Reduced height from 400px */
-    width: 75%; /* Adjust the width as necessary, example reduces to 80% of full width */
-    margin: 0 auto; /* Centers the graph if it's less than 100% width */
+    height: 500px; /* Adjusted size for a smaller graph */
+    width: 50%; /* Center the graph if less than full width */
+    margin: 20px auto; /* Adds auto margins to horizontally center the div if it's narrower */
 }
 
 .button-container button {
@@ -44,4 +51,19 @@ body {
 
 .button-container button:hover {
     background-color: #367C39;
+}
+
+.suggestions {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 80%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    color: #333;
+    font-size: 1em;
+}
+
+.suggestions h2 {
+    color: #4CAF50;
 }
