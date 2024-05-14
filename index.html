@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sensor Dashboard</title>
+    <title>ตรวจจับรถควันดำจากต้นตอ</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="72x72" href="static/logo.jpg">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body onload="showLastModified()">
     <header>
-        <h1>Sensor Dashboard</h1>
-        <p>Last updated: <span id="lastUpdated">26/5/2566 14:16</span></p>
+        <h1>ตรวจจับรถควันดำจากต้นตอ</h1>
+        <p>Last updated: <span id='time'></span></p>
     </header>
     <div class="sensor-container">
         <div class="sensor-box">
-            <h2>Dust Sensor Value</h2>
-            <div id="dustValue" class="sensor-value">120 µg/m³</div>
+            <h2>Carbon Monoxide Sensor Value</h2>
+            <div id="carbonValue" class="sensor-value">120 µg/m³</div>
         </div>
         <div class="sensor-box">
             <h2>Photoresistor Value</h2>
@@ -25,7 +27,7 @@
     <div class="chart-container">
         <canvas id="sensorChart"></canvas>
         <div class="button-container">
-            <button onclick="toggleData('dust')">Dust Sensor</button>
+            <button onclick="toggleData('carbon')">Carbon Monoxide Sensor</button>
             <button onclick="toggleData('light')">Photoresistor</button>
             <button onclick="toggleData('both')">Both Sensors</button>
         </div>

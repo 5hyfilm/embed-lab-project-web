@@ -1,12 +1,12 @@
 header {
-    background-color: #4CAF50; /* A deep green, similar to the Chadchart theme */
-    color: white;
+    background-color: #71CC00; /* A deep green, similar to the Chadchart theme */
+    color: black;
     padding: 10px 20px;
     text-align: center;
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Noto Sans Thai', sans-serif;
     background-color: #ffffff;
     margin: 0;
     padding: 0;
@@ -25,6 +25,7 @@ body {
     padding: 20px;
     width: 30%;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: linear-gradient(45deg, rgba(113, 204, 0, 0.3) 0%, rgba(90, 242, 251, 0.3) 100%);
 }
 
 .sensor-value {
@@ -33,18 +34,22 @@ body {
 }
 
 .chart-container {
-    position: relative;
-    height: 500px; /* Adjusted size for a smaller graph */
-    width: 50%; /* Center the graph if less than full width */
-    margin: 20px auto; /* Adds auto margins to horizontally center the div if it's narrower */
+    width: 80%; /* Reduce width to 50% of its container */
+    height: 200px; /* Adjust height as necessary */
+    margin: 20px auto; /* Center the chart horizontally */
+    padding: 10px; /* Add some padding inside the container */
+    background-color: #fff; /* Optional: adds background color */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for depth */
+    border-radius: 8px; /* Optional: rounds the corners */
 }
+
 
 .button-container button {
     margin: 10px;
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50;
+    background-color: #71CC00;
     color: white;
     cursor: pointer;
 }
@@ -54,16 +59,28 @@ body {
 }
 
 .suggestions {
-    background-color: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 20px auto;
-    width: 80%;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    color: #333;
-    font-size: 1em;
-}
+    position: fixed; /* or `sticky` */
+    bottom: 0; /* Aligns it at the bottom */
+    left: 0; /* Aligns it to the left */
+    width: 100%; /* Full width */
+    background-color: #ffffff; /* Ensures text is readable */
+ }
+
+ .suggestions {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Adds shadow for depth */
+    padding: 20px; /* Adds internal spacing */
+    border-top: 3px solid #71CC00; /* Adds a thematic colored border at the top */
+ }
 
 .suggestions h2 {
-    color: #4CAF50;
+    color: #71CC00;
 }
+
+@media (max-width: 768px) {
+    .suggestions {
+       position: static; /* Changes position on smaller screens */
+       width: auto; /* Takes full width of the screen */
+       margin: 10px 0; /* Adds some margin to the top and bottom */
+    }
+ }
+ 
