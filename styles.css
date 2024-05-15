@@ -1,86 +1,78 @@
-header {
-    background-color: #71CC00; /* A deep green, similar to the Chadchart theme */
-    color: black;
-    padding: 10px 20px;
-    text-align: center;
-}
-
 body {
     font-family: 'Noto Sans Thai', sans-serif;
-    background-color: #ffffff;
     margin: 0;
     padding: 0;
-    text-align: center;
+    box-sizing: border-box;
+    text-align: center; /* Center align text by default */
+}
+
+header {
+    background-color: #71CC00;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
 }
 
 .sensor-container {
     display: flex;
     justify-content: space-around;
-    margin: 20px 0;
+    padding: 20px;
 }
 
 .sensor-box {
-    background-color: #eef;
-    border-radius: 10px;
-    padding: 20px;
-    width: 30%;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
     background: linear-gradient(45deg, rgba(113, 204, 0, 0.3) 0%, rgba(90, 242, 251, 0.3) 100%);
+    text-align: center;
+    width: 400px;
 }
 
 .sensor-value {
-    font-size: 2em;
-    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 .chart-container {
-    width: 80%; /* Reduce width to 50% of its container */
-    height: 200px; /* Adjust height as necessary */
-    margin: 20px auto; /* Center the chart horizontally */
-    padding: 10px; /* Add some padding inside the container */
-    background-color: #fff; /* Optional: adds background color */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for depth */
-    border-radius: 8px; /* Optional: rounds the corners */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px; /* Adjust height as needed */
+    margin: 20px 0;
 }
 
+#sensorChart {
+    max-width: 100%; /* Adjust max width if needed */
+}
 
-.button-container button {
-    margin: 10px;
-    padding: 8px 16px;
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
     border: none;
-    border-radius: 5px;
     background-color: #71CC00;
     color: white;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 1em;
 }
 
-.button-container button:hover {
-    background-color: #367C39;
+button:hover {
+    background: linear-gradient(45deg, rgba(113, 204, 0, 0.3) 0%, rgba(90, 242, 251, 0.3) 100%);
+    color: #333;
 }
 
 .suggestions {
-    position: fixed; /* or `sticky` */
-    bottom: 0; /* Aligns it at the bottom */
-    left: 0; /* Aligns it to the left */
-    width: 100%; /* Full width */
-    background-color: #ffffff; /* Ensures text is readable */
- }
-
- .suggestions {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Adds shadow for depth */
-    padding: 20px; /* Adds internal spacing */
-    border-top: 3px solid #71CC00; /* Adds a thematic colored border at the top */
- }
-
-.suggestions h2 {
-    color: #71CC00;
+    background-color: #71CC00;
+    padding: 20px;
+    margin: 20px 0;
+    border-top: 1px solid #ddd;
 }
 
-@media (max-width: 768px) {
-    .suggestions {
-       position: static; /* Changes position on smaller screens */
-       width: auto; /* Takes full width of the screen */
-       margin: 10px 0; /* Adds some margin to the top and bottom */
-    }
- }
- 
+#suggestionsText {
+    font-size: 1.2em;
+    color: #333;
+}
