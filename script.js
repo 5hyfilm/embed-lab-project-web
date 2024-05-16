@@ -45,7 +45,7 @@ function showLastModified() {
 }
 
 // Function to fetch data from Firestore and update the chart
-function fetchData() {
+function fetchData(sensorType) {
     db.collection("testset").orderBy("timestamp", "asc").get().then((querySnapshot) => {
         if (!querySnapshot.empty) {
             const data = [];
@@ -56,7 +56,7 @@ function fetchData() {
             document.getElementById("carbonMonoxideValue").textContent = mostRecentDoc.coPPM + " ppm";
             document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + " Lux";
 
-            updateChart(data);
+            updateChart(data, sensorType);
         } else {
             console.log("No documents found!");
         }
@@ -70,35 +70,44 @@ let chart;
 const ctx = document.getElementById('sensorChart').getContext('2d');
 
 // Function to update the chart with data
-function updateChart(data) {
+function updateChart(data, sensorType) {
     const timestamps = data.map(entry => new Date(entry.timestamp * 1000).toLocaleString());
     const carbonMonoxideData = data.map(entry => entry.coPPM);
     const lightData = data.map(entry => entry.lightPercent);
 
-    createChart(timestamps, carbonMonoxideData, lightData);
+    createChart(timestamps, carbonMonoxideData, lightData, sensorType);
 }
 
-function createChart(timestamps, carbonMonoxideData, lightData) {
+function createChart(timestamps, carbonMonoxideData, lightData, sensorType) {
     if (chart) {
         chart.destroy();
     }
+
+    const datasets = [];
+    if (sensorType === 'carbonMonoxide' || sensorType === 'both') {
+        datasets.push({
+            label: 'Carbon Monoxide (ppm)',
+            data: carbonMonoxideData,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        });
+    }
+    if (sensorType === 'light' || sensorType === 'both') {
+        datasets.push({
+            label: 'Photoresistor (Lux)',
+            data: lightData,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        });
+    }
+
     chart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: timestamps,
-            datasets: [{
-                label: 'Carbon Monoxide (ppm)',
-                data: carbonMonoxideData,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }, {
-                label: 'Photoresistor (Lux)',
-                data: lightData,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
+            datasets: datasets
         },
         options: {
             scales: {
@@ -111,11 +120,11 @@ function createChart(timestamps, carbonMonoxideData, lightData) {
 }
 
 function toggleData(sensorType) {
-    fetchData();  // Fetch new data from Firestore whenever toggling
+    fetchData(sensorType);  // Fetch new data from Firestore whenever toggling
 }
 
 // Initialize with Carbon Monoxide data
 window.onload = function() {
     showLastModified();
-    fetchData();  // Fetch initial data from Firestore
+    toggleData('both');  // Show both datasets initially
 }
