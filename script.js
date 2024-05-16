@@ -46,18 +46,17 @@ function showLastModified() {
 
 // Function to fetch data from Firestore
 function fetchData() {
-    db.collection("testset").doc("testdata").get().then((doc) => {
-        if (doc.exists) {
-            const data = doc.data();
-            document.getElementById("carbonMonoxideValue").textContent = data.coPPM + " ppm";
-            document.getElementById("lightValue").textContent = data.lightPercent + " Lux";
-            // Assuming you have historical data arrays for chart
-            updateChart(data);
+    db.collection("testset").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+            const mostRecentDoc = querySnapshot.docs[0].data();
+            document.getElementById("carbonMonoxideValue").textContent = mostRecentDoc.coPPM + " ppm";
+            document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + " Lux";
+            updateChart(mostRecentDoc);
         } else {
-            console.log("No such document!");
+            console.log("No documents found!");
         }
     }).catch((error) => {
-        console.error("Error getting document:", error);
+        console.error("Error getting documents:", error);
     });
 }
 
