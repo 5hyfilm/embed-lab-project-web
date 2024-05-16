@@ -44,14 +44,19 @@ function showLastModified() {
     localStorage.setItem('lastOpened', now.toISOString());
 }
 
-// Function to fetch data from Firestore
+// Function to fetch data from Firestore and update the chart
 function fetchData() {
-    db.collection("testset").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+    db.collection("testset").orderBy("timestamp", "asc").get().then((querySnapshot) => {
         if (!querySnapshot.empty) {
-            const mostRecentDoc = querySnapshot.docs[0].data();
+            const data = [];
+            querySnapshot.forEach(doc => data.push(doc.data()));
+
+            // Get the most recent document
+            const mostRecentDoc = data[data.length - 1];
             document.getElementById("carbonMonoxideValue").textContent = mostRecentDoc.coPPM + " ppm";
             document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + " Lux";
-            updateChart(mostRecentDoc);
+
+            updateChart(data);
         } else {
             console.log("No documents found!");
         }
@@ -64,25 +69,23 @@ function fetchData() {
 let chart;
 const ctx = document.getElementById('sensorChart').getContext('2d');
 
-// Example data for chart
-let carbonMonoxideData = [];
-let lightData = [];
-
+// Function to update the chart with data
 function updateChart(data) {
-    // Assuming you have fields for historical data in Firestore
-    carbonMonoxideData = data.coPPMHistory || [];
-    lightData = data.lightHistory || [];
-    createChart(carbonMonoxideData, lightData);
+    const timestamps = data.map(entry => new Date(entry.timestamp * 1000).toLocaleString());
+    const carbonMonoxideData = data.map(entry => entry.coPPM);
+    const lightData = data.map(entry => entry.lightPercent);
+
+    createChart(timestamps, carbonMonoxideData, lightData);
 }
 
-function createChart(carbonMonoxideData, lightData) {
+function createChart(timestamps, carbonMonoxideData, lightData) {
     if (chart) {
         chart.destroy();
     }
     chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['1', '2', '3', '4', '5', '6', '7'], // Update labels as needed
+            labels: timestamps,
             datasets: [{
                 label: 'Carbon Monoxide (ppm)',
                 data: carbonMonoxideData,
