@@ -7,7 +7,7 @@ const firebaseConfig = {
     messagingSenderId: "696453054033",
     appId: "1:696453054033:web:1a4e98677c198dcd7ec270",
     measurementId: "G-T24SWGTVT3"
-  };
+};
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -46,10 +46,13 @@ function showLastModified() {
 
 // Function to fetch data from Firestore and update the chart
 function fetchData(sensorType) {
-    db.collection("testset").orderBy("timestamp", "asc").get().then((querySnapshot) => {
+    db.collection("data").orderBy("timestamp", "desc").limit(25).get().then((querySnapshot) => {
         if (!querySnapshot.empty) {
             const data = [];
             querySnapshot.forEach(doc => data.push(doc.data()));
+
+            // Reverse the data to have the oldest first
+            data.reverse();
 
             // Get the most recent document
             const mostRecentDoc = data[data.length - 1];
@@ -123,7 +126,7 @@ function toggleData(sensorType) {
     fetchData(sensorType);  // Fetch new data from Firestore whenever toggling
 }
 
-// Initialize with Carbon Monoxide data
+// Initialize with both datasets
 window.onload = function() {
     showLastModified();
     toggleData('both');  // Show both datasets initially
