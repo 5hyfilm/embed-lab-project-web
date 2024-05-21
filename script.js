@@ -12,6 +12,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+let chartData = [];
+
 // Function to format the date and time
 function formatDateTime(date) {
     const options = { 
@@ -60,6 +62,7 @@ function fetchData(sensorType) {
             document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + " Lux";
 
             updateChart(data, sensorType);
+            chartData = data;  // Save data for export
         } else {
             console.log("No documents found!");
         }
@@ -124,6 +127,41 @@ function createChart(timestamps, carbonMonoxideData, lightData, sensorType) {
 
 function toggleData(sensorType) {
     fetchData(sensorType);  // Fetch new data from Firestore whenever toggling
+}
+
+// Export data to CSV
+function exportCSV() {
+    // Define the CSV file header
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Date,Time,Carbon Monoxide (ppm),Light (Lux)\n";
+
+    // Iterate through chartData and format the rows
+    chartData.forEach(entry => {
+        const date = new Date(entry.timestamp * 1000);
+        const dateString = date.toLocaleDateString();
+        const timeString = date.toLocaleTimeString();
+        const carbonMonoxide = entry.coPPM;
+        const light = entry.lightPercent;
+        const row = `${dateString},${timeString},${carbonMonoxide},${light}`;
+        csvContent += row + "\n";
+    });
+
+    // Encode the CSV content and create a link to download the file
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "sensor_data.csv");
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Export chart as PNG
+function exportPNG() {
+    const link = document.createElement('a');
+    link.href = chart.toBase64Image();
+    link.download = 'sensor_chart.png';
+    link.click();
 }
 
 // Initialize with both datasets

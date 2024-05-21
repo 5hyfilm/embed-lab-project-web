@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตรวจจับรถควันดำจากต้นตอ</title>
+    <title>Sensor Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" sizes="72x72" href="images/logo.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
@@ -14,16 +12,13 @@
     <!-- Add Firebase products that you want to use -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
 </head>
-
 <body onload="showLastModified()">
     <header>
         <h1>
-            <a href="https://www.chadchart.com/policy/62151f1b204d4c4f8ab8c841/" target="_blank"
-                style="text-decoration: none; color: inherit;">
-                ตรวจจับรถควันดำจากต้นตอ
-            </a>
+          <a href="https://www.chadchart.com/policy/62151f1b204d4c4f8ab8c841/" target="_blank" style="text-decoration: none; color: inherit;">
+            ตรวจจับรถควันดำจากต้นตอ
+          </a>
         </h1>
-
         <p>Last updated: <span id='time'></span></p>
     </header>
     <div class="sensor-container">
@@ -44,12 +39,15 @@
         <button onclick="toggleData('light')">Photoresistor</button>
         <button onclick="toggleData('both')">Both Sensors</button>
     </div>
+    <div class="export-button-container">
+        <button class="export-button" onclick="exportCSV()">Export CSV</button>
+        <button class="export-button" onclick="exportPNG()">Export PNG</button>
+    </div>
     <div class="suggestions">
         <h2>Suggestions</h2>
         <p id="suggestionsText">อย่าออกจากบ้าน ไม่งั้นพ่อมึงตาย</p>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
-
 </html>

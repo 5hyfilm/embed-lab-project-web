@@ -44,7 +44,7 @@ header {
     max-width: 100%; /* Adjust max width if needed */
 }
 
-.button-container {
+.button-container, .export-button-container {
     text-align: center;
     margin-top: 20px;
 }
@@ -63,6 +63,14 @@ button {
 button:hover {
     background: linear-gradient(45deg, rgba(113, 204, 0, 0.3) 0%, rgba(90, 242, 251, 0.3) 100%);
     color: #333;
+}
+
+.export-button {
+    background-color: #28a745;
+}
+
+.export-button:hover {
+    background-color: #218838;
 }
 
 .suggestions {
