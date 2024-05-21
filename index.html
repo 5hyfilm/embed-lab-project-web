@@ -39,10 +39,15 @@
         <button onclick="toggleData('light')">Photoresistor</button>
         <button onclick="toggleData('both')">Both Sensors</button>
     </div>
-    <div class="export-button-container">
-        <button class="export-button" onclick="exportCSV()">Export CSV</button>
-        <button class="export-button" onclick="exportPNG()">Export PNG</button>
+    <div class="load-more-container">
+        <button class="load-more-button" onclick="loadMoreData()">Load More Data</button>
+        <button class="recent-data-button" onclick="fetchRecentData()">25 Recent Data</button>
     </div>
+    <div class="export-button-container">
+        <button class="export-button" onclick="exportCSV()">Export as a CSV</button>
+        <button class="export-button" onclick="exportPNG()">Export as a PNG</button>
+    </div>
+
     <div class="suggestions">
         <h2>Suggestions</h2>
         <p id="suggestionsText">อย่าออกจากบ้าน ไม่งั้นพ่อมึงตาย</p>

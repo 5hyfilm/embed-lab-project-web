@@ -13,6 +13,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 let chartData = [];
+let lastVisible = null; // Keep track of the last visible document for pagination
+let sensorTypeGlobal = 'both'; // Keep track of the current sensor type
 
 // Function to format the date and time
 function formatDateTime(date) {
@@ -47,28 +49,46 @@ function showLastModified() {
 }
 
 // Function to fetch data from Firestore and update the chart
-function fetchData(sensorType) {
-    db.collection("data").orderBy("timestamp", "desc").limit(25).get().then((querySnapshot) => {
+function fetchData(sensorType, initial = true) {
+    let query = db.collection("data").orderBy("timestamp", "desc").limit(25);
+
+    if (!initial && lastVisible) {
+        query = query.startAfter(lastVisible);
+    }
+
+    query.get().then((querySnapshot) => {
         if (!querySnapshot.empty) {
             const data = [];
             querySnapshot.forEach(doc => data.push(doc.data()));
+            lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
             // Reverse the data to have the oldest first
             data.reverse();
 
+            if (initial) {
+                chartData = data; // Initial load
+            } else {
+                chartData = data.concat(chartData); // Append older data
+            }
+
             // Get the most recent document
-            const mostRecentDoc = data[data.length - 1];
+            const mostRecentDoc = chartData[chartData.length - 1];
             document.getElementById("carbonMonoxideValue").textContent = mostRecentDoc.coPPM + " ppm";
             document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + " Lux";
 
-            updateChart(data, sensorType);
-            chartData = data;  // Save data for export
+            updateChart(chartData, sensorType);
         } else {
             console.log("No documents found!");
         }
     }).catch((error) => {
         console.error("Error getting documents:", error);
     });
+}
+
+// Fetch 25 most recent data points
+function fetchRecentData() {
+    lastVisible = null; // Reset the last visible document
+    fetchData(sensorTypeGlobal); // Fetch the 25 most recent data points
 }
 
 // Chart.js setup
@@ -126,7 +146,13 @@ function createChart(timestamps, carbonMonoxideData, lightData, sensorType) {
 }
 
 function toggleData(sensorType) {
+    sensorTypeGlobal = sensorType;
     fetchData(sensorType);  // Fetch new data from Firestore whenever toggling
+}
+
+// Load more data
+function loadMoreData() {
+    fetchData(sensorTypeGlobal, false);  // Load older data
 }
 
 // Export data to CSV
