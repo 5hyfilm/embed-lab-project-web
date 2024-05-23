@@ -13,8 +13,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 let chartData = [];
-let lastVisible = null; // Keep track of the last visible document for pagination
 let sensorTypeGlobal = 'both'; // Keep track of the current sensor type
+let dataLimit = 25; // Default number of data points to fetch
 
 // Function to format the date and time
 function formatDateTime(date) {
@@ -50,17 +50,12 @@ function showLastModified() {
 
 // Function to fetch data from Firestore and update the chart
 function fetchData(sensorType, initial = true) {
-    let query = db.collection("data").orderBy("timestamp", "desc").limit(25);
-
-    if (!initial && lastVisible) {
-        query = query.startAfter(lastVisible);
-    }
+    let query = db.collection("data").orderBy("timestamp", "desc").limit(dataLimit);
 
     query.get().then((querySnapshot) => {
         if (!querySnapshot.empty) {
             const data = [];
             querySnapshot.forEach(doc => data.push(doc.data()));
-            lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
             // Reverse the data to have the oldest first
             data.reverse();
@@ -74,7 +69,7 @@ function fetchData(sensorType, initial = true) {
             // Get the most recent document
             const mostRecentDoc = chartData[chartData.length - 1];
             document.getElementById("carbonMonoxideValue").textContent = mostRecentDoc.coPPM + " ppm";
-            document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + " Lux";
+            document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + "%";
 
             updateSuggestions(mostRecentDoc);
             updateChart(chartData, sensorType);
@@ -106,10 +101,16 @@ function updateSuggestions(data) {
     }
 }
 
-// Fetch 25 most recent data points
+// Function to update the data limit based on user input
+function updateDataLimit() {
+    const dataLimitInput = document.getElementById('dataLimit');
+    dataLimit = parseInt(dataLimitInput.value, 10);
+    fetchRecentData();
+}
+
+// Fetch recent data points
 function fetchRecentData() {
-    lastVisible = null; // Reset the last visible document
-    fetchData(sensorTypeGlobal); // Fetch the 25 most recent data points
+    fetchData(sensorTypeGlobal); // Fetch the most recent data points
 }
 
 // Chart.js setup
@@ -142,7 +143,7 @@ function createChart(timestamps, carbonMonoxideData, lightData, sensorType) {
     }
     if (sensorType === 'light' || sensorType === 'both') {
         datasets.push({
-            label: 'Photoresistor (Lux)',
+            label: 'Photoresistor (%)',
             data: lightData,
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
@@ -171,16 +172,11 @@ function toggleData(sensorType) {
     fetchData(sensorType);  // Fetch new data from Firestore whenever toggling
 }
 
-// Load more data
-function loadMoreData() {
-    fetchData(sensorTypeGlobal, false);  // Load older data
-}
-
 // Export data to CSV
 function exportCSV() {
     // Define the CSV file header
     let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Date,Time,Carbon Monoxide (ppm),Light (Lux)\n";
+    csvContent += "Date,Time,Carbon Monoxide (ppm),Photoresistor (%)\n";
 
     // Iterate through chartData and format the rows
     chartData.forEach(entry => {

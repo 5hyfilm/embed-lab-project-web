@@ -44,7 +44,7 @@ header {
     max-width: 100%; /* Adjust max width if needed */
 }
 
-.button-container, .export-button-container, .load-more-container {
+.button-container, .export-button-container, .controls-container {
     text-align: center;
     margin-top: 20px;
 }
@@ -53,7 +53,7 @@ button {
     padding: 10px 20px;
     margin: 5px;
     border: none;
-    background-color: #28a745;
+    background-color: #71CC00;
     color: white;
     border-radius: 5px;
     cursor: pointer;
@@ -61,25 +61,6 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(45deg, rgba(113, 204, 0, 0.3) 0%, rgba(90, 242, 251, 0.3) 100%);
-    color: #333;
-}
-
-.load-more-button, .recent-data-button {
-    background-color: #71CC00;
-    color: white;
-}
-
-.load-more-button:hover, .recent-data-button:hover {
-    background-color: linear-gradient(45deg, rgba(113, 204, 0, 0.3) 0%, rgba(90, 242, 251, 0.3) 100%);
-    color: #333;
-}
-
-.export-button {
-    background-color: #28a745;
-}
-
-.export-button:hover {
     background: linear-gradient(45deg, rgba(113, 204, 0, 0.3) 0%, rgba(90, 242, 251, 0.3) 100%);
     color: #333;
 }
