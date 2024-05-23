@@ -68,8 +68,8 @@ function fetchData(sensorType, initial = true) {
 
             // Get the most recent document
             const mostRecentDoc = chartData[chartData.length - 1];
-            document.getElementById("carbonMonoxideValue").textContent = mostRecentDoc.coPPM + " ppm";
-            document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + "%";
+            document.getElementById("carbonMonoxideValue").textContent = calculateCarbonMonoxide(mostRecentDoc.coPPM).toFixed(2) + " ppm";
+            document.getElementById("lightValue").textContent = calculateLightPercentage(mostRecentDoc.lightPercent).toFixed(2) + "%";
 
             updateSuggestions(mostRecentDoc);
             updateChart(chartData, sensorType);
@@ -84,21 +84,33 @@ function fetchData(sensorType, initial = true) {
 // Function to update suggestions based on sensor data
 function updateSuggestions(data) {
     const suggestionsText = document.getElementById("suggestionsText");
-    if (data.coPPM >= 50 && data.coPPM < 200) {
+    const coPPM = calculateCarbonMonoxide(data.coPPM);
+
+    if (coPPM >= 50 && coPPM < 200) {
         suggestionsText.textContent = "ที่ระดับ 50 ppm จนกระทั่งถึง 200 ppm จะทำให้มีอาการปวดศีรษะเล็กน้อยและอ่อนเพลีย";
-    } else if (data.coPPM >= 200 && data.coPPM < 400) {
+    } else if (coPPM >= 200 && coPPM < 400) {
         suggestionsText.textContent = "ที่ระดับ 200 ppm จนกระทั่งถึง 400 ppm จะเริ่มมีอาการคลื่นไส้ อาเจียน วิงเวียนศีรษะอย่างรุนแรง และอาจถึงขั้นเป็นลม";
-    } else if (data.coPPM >= 400 && data.coPPM < 1200) {
+    } else if (coPPM >= 400 && coPPM < 1200) {
         suggestionsText.textContent = "ที่ระดับประมาณ 1,200 ppm จะเริ่มเกิดอาการหายใจเต้นเร็วขึ้นผิดปกติ และเริ่มเต้นผิดจังหวะ";
-    } else if (data.coPPM >= 1200 && data.coPPM < 2000) {
+    } else if (coPPM >= 1200 && coPPM < 2000) {
         suggestionsText.textContent = "ที่ระดับประมาณ 2,000 ppm อาจถึงขั้นหมดสติ และอาจถึงเสียชีวิต";
-    } else if (data.coPPM >= 2000 && data.coPPM < 5000) {
+    } else if (coPPM >= 2000 && coPPM < 5000) {
         suggestionsText.textContent = "ที่ระดับประมาณ 5,000 ppm อาจทำให้เสียชีวิตภายในไม่กี่นาที แต่อาจจะรอดชีวิตถ้านำผู้ป่วยออกจากบริเวณที่มีอากาศบริสุทธิ์ หรือมีออกซิเจนเพียงพอ";
-    } else if (data.coPPM >= 5000) {
+    } else if (coPPM >= 5000) {
         suggestionsText.textContent = "ที่ระดับประมาณ 5,000 ppm อาจทำให้เสียชีวิตภายในไม่กี่นาที";
     } else {
         suggestionsText.textContent = "อากาศอยู่ในระดับปลอดภัย";
     }
+}
+
+// Function to calculate the light percentage
+function calculateLightPercentage(lightData) {
+    return (lightData * 100) / 4095;
+}
+
+// Function to calculate carbon monoxide data
+function calculateCarbonMonoxide(coPPM) {
+    return Math.pow((((4095 / coPPM) - 1.0) / 19.709), (-1.0 / 0.652));
 }
 
 // Function to update the data limit based on user input
@@ -120,8 +132,8 @@ const ctx = document.getElementById('sensorChart').getContext('2d');
 // Function to update the chart with data
 function updateChart(data, sensorType) {
     const timestamps = data.map(entry => new Date(entry.timestamp * 1000).toLocaleString());
-    const carbonMonoxideData = data.map(entry => entry.coPPM);
-    const lightData = data.map(entry => entry.lightPercent);
+    const carbonMonoxideData = data.map(entry => calculateCarbonMonoxide(entry.coPPM).toFixed(2));
+    const lightData = data.map(entry => calculateLightPercentage(entry.lightPercent).toFixed(2));
 
     createChart(timestamps, carbonMonoxideData, lightData, sensorType);
 }
@@ -183,8 +195,8 @@ function exportCSV() {
         const date = new Date(entry.timestamp * 1000);
         const dateString = date.toLocaleDateString();
         const timeString = date.toLocaleTimeString();
-        const carbonMonoxide = entry.coPPM;
-        const light = entry.lightPercent;
+        const carbonMonoxide = calculateCarbonMonoxide(entry.coPPM).toFixed(2);
+        const light = calculateLightPercentage(entry.lightPercent).toFixed(2);
         const row = `${dateString},${timeString},${carbonMonoxide},${light}`;
         csvContent += row + "\n";
     });
