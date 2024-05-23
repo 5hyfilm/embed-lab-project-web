@@ -76,6 +76,7 @@ function fetchData(sensorType, initial = true) {
             document.getElementById("carbonMonoxideValue").textContent = mostRecentDoc.coPPM + " ppm";
             document.getElementById("lightValue").textContent = mostRecentDoc.lightPercent + " Lux";
 
+            updateSuggestions(mostRecentDoc);
             updateChart(chartData, sensorType);
         } else {
             console.log("No documents found!");
@@ -83,6 +84,26 @@ function fetchData(sensorType, initial = true) {
     }).catch((error) => {
         console.error("Error getting documents:", error);
     });
+}
+
+// Function to update suggestions based on sensor data
+function updateSuggestions(data) {
+    const suggestionsText = document.getElementById("suggestionsText");
+    if (data.coPPM >= 50 && data.coPPM < 200) {
+        suggestionsText.textContent = "ที่ระดับ 50 ppm จนกระทั่งถึง 200 ppm จะทำให้มีอาการปวดศีรษะเล็กน้อยและอ่อนเพลีย";
+    } else if (data.coPPM >= 200 && data.coPPM < 400) {
+        suggestionsText.textContent = "ที่ระดับ 200 ppm จนกระทั่งถึง 400 ppm จะเริ่มมีอาการคลื่นไส้ อาเจียน วิงเวียนศีรษะอย่างรุนแรง และอาจถึงขั้นเป็นลม";
+    } else if (data.coPPM >= 400 && data.coPPM < 1200) {
+        suggestionsText.textContent = "ที่ระดับประมาณ 1,200 ppm จะเริ่มเกิดอาการหายใจเต้นเร็วขึ้นผิดปกติ และเริ่มเต้นผิดจังหวะ";
+    } else if (data.coPPM >= 1200 && data.coPPM < 2000) {
+        suggestionsText.textContent = "ที่ระดับประมาณ 2,000 ppm อาจถึงขั้นหมดสติ และอาจถึงเสียชีวิต";
+    } else if (data.coPPM >= 2000 && data.coPPM < 5000) {
+        suggestionsText.textContent = "ที่ระดับประมาณ 5,000 ppm อาจทำให้เสียชีวิตภายในไม่กี่นาที แต่อาจจะรอดชีวิตถ้านำผู้ป่วยออกจากบริเวณที่มีอากาศบริสุทธิ์ หรือมีออกซิเจนเพียงพอ";
+    } else if (data.coPPM >= 5000) {
+        suggestionsText.textContent = "ที่ระดับประมาณ 5,000 ppm อาจทำให้เสียชีวิตภายในไม่กี่นาที";
+    } else {
+        suggestionsText.textContent = "อากาศอยู่ในระดับปลอดภัย";
+    }
 }
 
 // Fetch 25 most recent data points
