@@ -219,8 +219,9 @@ function exportPNG() {
     link.click();
 }
 
-// Initialize with both datasets
+// Initialize with both datasets and set up interval for refreshing data
 window.onload = function() {
     showLastModified();
     toggleData('both');  // Show both datasets initially
+    setInterval(fetchRecentData, 5000);  // Refresh data every 5 seconds
 }
